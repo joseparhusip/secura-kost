@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavbarLoggedIn from '../components/NavbarLoggedIn'; 
-import '../css/style.css'; 
+import NavbarLoggedIn from '../components/NavbarLoggedIn';
+import '../css/style.css';
 
-// Import gambar kost
 import img1 from '../assets/img/kost/kost-1/kamar-kost-1.jpeg';
 import img2 from '../assets/img/kost/kost-2/kamar-kost-2.jpeg';
 import img3 from '../assets/img/kost/kost-3/kamar-kost-3.jpg';
@@ -21,6 +20,9 @@ import iconSimpan from '../assets/icons/icons-details/simpan.png';
 import iconKamarMandi from '../assets/icons/icons-details/kamar-mandi.png';
 import iconHome from '../assets/icons/icons-details/home.png';
 
+const FASILITAS_OPTIONS = ['AC', 'WiFi', 'Kamar Mandi Dalam', 'Dapur Bersama', 'Parkir'];
+const TIPE_OPTIONS = ['Campur', 'Putra', 'Putri'];
+
 export default function SearchKost() {
   const navigate = useNavigate();
 
@@ -28,45 +30,49 @@ export default function SearchKost() {
   const [selectedBudget, setSelectedBudget] = useState('Semua harga');
   const [selectedTipe, setSelectedTipe] = useState('Semua tipe');
   const [activeFilters, setActiveFilters] = useState([]);
-  
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
-
-  // ── STATE UNTUK SMART MATCHING AI CHAT ──────────────────────────
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
-  const [chatInput, setChatInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [chatHistory, setChatHistory] = useState([
-    {
-      role: 'assistant',
-      text: 'Halo! Saya KostKu AI Assistant 👋\n\nCeritakan kebutuhan kostmu — lokasi, budget, tipe penghuni, atau fasilitas — dan saya akan langsung mencarikan rekomendasi terbaik dari database kami secara real-time! 😊',
-      recommendations: []
-    }
-  ]);
 
-  const messagesEndRef = useRef(null);
-
-  // Auto-scroll ke pesan paling baru
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [chatHistory, isLoading]);
+  const [aiForm, setAiForm] = useState({
+    target: '',
+    budget: '',
+    tipe: [],
+    fasilitas: [],
+  });
 
   useEffect(() => {
-    if (isMobileFilterOpen || isAiModalOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = (isMobileFilterOpen || isAiModalOpen) ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [isMobileFilterOpen, isAiModalOpen]);
 
   const toggleFilter = (filterName) => {
-    if (activeFilters.includes(filterName)) {
-      setActiveFilters(activeFilters.filter((f) => f !== filterName));
+    setActiveFilters(prev =>
+      prev.includes(filterName) ? prev.filter(f => f !== filterName) : [...prev, filterName]
+    );
+  };
+
+  const toggleAiChip = (field, value) => {
+    setAiForm(prev => ({
+      ...prev,
+      [field]: prev[field].includes(value)
+        ? prev[field].filter(v => v !== value)
+        : [...prev[field], value],
+    }));
+  };
+
+  const handleAiMatch = () => {
+    let newFilters = [];
+    if (aiForm.target) newFilters.push(aiForm.target);
+    if (aiForm.fasilitas.length > 0) newFilters = [...newFilters, ...aiForm.fasilitas];
+    setActiveFilters(newFilters);
+    setSelectedBudget(aiForm.budget || 'Semua harga');
+    if (aiForm.tipe.length === 1) {
+      setSelectedTipe(`Kost ${aiForm.tipe[0]}`);
     } else {
-      setActiveFilters([...activeFilters, filterName]);
+      setSelectedTipe('Semua tipe');
     }
+    setIsAiModalOpen(false);
+    setAiForm({ target: '', budget: '', tipe: [], fasilitas: [] });
   };
 
   const initialKostData = [
@@ -76,152 +82,125 @@ export default function SearchKost() {
     { id: 4, image: img4, nama: "Kost Putri Anggrek", lokasi: "Dipatiukur, Bandung", hargaNum: 1350000, harga: "Rp 1.350.000", tipe: "Putri", fasilitas: ["AC", "WiFi", "Kamar Mandi Dalam"], tags: ["Mahasiswa", "Putri", "AC", "WiFi", "Kamar Mandi Dalam", "Terverifikasi", "Scam Score Tinggi"], rating: "4.9", ulasan: 45, scamScore: 95, badge: "Populer" },
     { id: 5, image: img5, nama: "Kost Putra Rajawali", lokasi: "Setiabudi, Bandung", hargaNum: 1100000, harga: "Rp 1.100.000", tipe: "Putra", fasilitas: ["WiFi", "Parkir Luas", "Kamar Mandi Dalam"], tags: ["Mahasiswa", "Putra", "WiFi", "Kamar Mandi Dalam", "Terverifikasi"], rating: "4.4", ulasan: 12, scamScore: 85, badge: "Terverifikasi" },
     { id: 6, image: img6, nama: "Kost Campur Sejahtera", lokasi: "Ciumbuleuit, Bandung", hargaNum: 2000000, harga: "Rp 2.000.000", tipe: "Campur", fasilitas: ["AC", "WiFi", "Kamar Mandi Dalam"], tags: ["Ekspatriat", "Campur", "AC", "WiFi", "Kamar Mandi Dalam", "Ada Escrow", "Scam Score Tinggi"], rating: "4.9", ulasan: 50, scamScore: 98, badge: "Premium" },
-    { id: 7, image: img7, nama: "Kost Putri Kenanga", lokasi: "Tubagus Ismail, Bandung", hargaNum: 850000, harga: "Rp 850.000", tipe: "Putri", fasilitas: ["WiFi", "Dapur Bersama"], tags: ["Mahasiswa", "Putri", "WiFi"], rating: "4.3", ulasan: 22, scamScore: 78, badge: "Hemat" }
+    { id: 7, image: img7, nama: "Kost Putri Kenanga", lokasi: "Tubagus Ismail, Bandung", hargaNum: 850000, harga: "Rp 850.000", tipe: "Putri", fasilitas: ["WiFi", "Dapur Bersama"], tags: ["Mahasiswa", "Putri", "WiFi"], rating: "4.3", ulasan: 22, scamScore: 78, badge: "Hemat" },
   ];
 
-  // ── LOGIKAI INTEGRASI CHAT GEMINI DENGAN ROTASI KEY ──────────────
-  const handleSendChatMessage = async (presetText = '') => {
-    const textToSend = presetText || chatInput.trim();
-    if (!textToSend || isLoading) return;
-
-    setChatInput('');
-    setIsLoading(true);
-
-    // Ambil history chat sebelumnya dalam format API Gemini
-    const currentHistory = [...chatHistory, { role: 'user', text: textToSend }];
-    setChatHistory(currentHistory);
-
-    const systemPrompt = `Kamu adalah KostKu AI Assistant — asisten khusus untuk platform pencarian kost di Indonesia.
-
-ATURAN WAJIB:
-- HANYA jawab pertanyaan seputar kost, hunian, fasilitas, harga kost, tips memilih kost, dan kehidupan di kost.
-- Jika pertanyaan di luar topik kost, tolak dengan sopan dan arahkan kembali.
-- Gunakan bahasa Indonesia yang ramah, kasual tapi tetap informatif.
-- JANGAN gunakan tanda bintang (**), markdown, atau simbol formatting apapun dalam teks biasa. Tampilkan teks polos yang bersih agar mudah dibaca oleh user.
-
-Database kost terupdate yang tersedia pada sistem saat ini:
-${JSON.stringify(initialKostData.map(k => ({ id: k.id, nama: k.nama, lokasi: k.lokasi, harga: k.hargaNum, tipe: k.tipe, fasilitas: k.fasilitas, rating: k.rating })), null, 2)}
-
-Instruksi saat merekomendasikan kost:
-1. Analisis kebutuhan user dari pesan mereka: lokasi, budget, tipe, fasilitas.
-2. Rekomendasikan 1-3 kost yang paling relevan dari database di atas.
-3. Berikan penjelasan singkat berparagraf polos (tanpa bintan-bintang markdown) kenapa kost tersebut cocok.
-4. Tentukan nilai persentase kecocokan (%) untuk indikator kecocokan.
-
-WAJIB: Di akhir respons text kamu, SELALU sertakan lampiran data JSON rekomendasi dalam tag khusus seperti ini tanpa merusak teks:
-[REKOMENDASI_JSON]
-[{"id": 1, "match": 95}, {"id": 2, "match": 87}]
-[/REKOMENDASI_JSON]`;
-
-    const geminiContents = currentHistory.map(msg => ({
-      role: msg.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: msg.text }]
-    }));
-
-    const GEMINI_KEYS = [
-      import.meta.env.VITE_GEMINI_KEY_1,
-      import.meta.env.VITE_GEMINI_KEY_2,
-      import.meta.env.VITE_GEMINI_KEY_3,
-      import.meta.env.VITE_GEMINI_KEY_4,
-      import.meta.env.VITE_GEMINI_KEY_5,
-      import.meta.env.VITE_GEMINI_KEY_6,
-    ].filter(Boolean);
-
-    const requestBody = {
-      systemInstruction: { parts: [{ text: systemPrompt }] },
-      contents: geminiContents,
-      generationConfig: { maxOutputTokens: 2000, temperature: 0.7 }
-    };
-
-    let responseData = null;
-
-    // Loop rotasi kunci API jika terkena batasan kuota / error
-    for (let i = 0; i < GEMINI_KEYS.length; i++) {
-      const key = GEMINI_KEYS[i];
-      try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${key}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(requestBody)
-        });
-        const json = await res.json();
-
-        if (json.error) {
-          const { code, status } = json.error;
-          if (code === 429 || code === 503 || status === 'RESOURCE_EXHAUSTED') {
-            continue; // Coba key berikutnya jika limit tercapai
-          }
-          responseData = json;
-          break;
-        }
-
-        responseData = json;
-        break;
-      } catch (err) {
-        continue;
-      }
-    }
-
-    setIsLoading(false);
-
-    if (!responseData || responseData.error) {
-      setChatHistory([...currentHistory, { role: 'assistant', text: 'Maaf, sistem kecerdasan buatan kami sedang padat antrean. Silakan coba kirim pesan kembali beberapa saat lagi ya!', recommendations: [] }]);
-      return;
-    }
-
-    let rawText = responseData.candidates?.[0]?.content?.parts?.[0]?.text || 'Tidak ada tanggapan dari AI.';
-    
-    // Bersihkan sisa-sisa tanda bintang markdown jika AI tidak sengaja membuatnya
-    rawText = rawText.replace(/\*\*/g, '');
-
-    let recommendations = [];
-    const jsonMatch = rawText.match(/\[REKOMENDASI_JSON\]([\s\S]*?)\[\/REKOMENDASI_JSON\]/);
-    if (jsonMatch) {
-      try {
-        recommendations = JSON.parse(jsonMatch[1].trim());
-      } catch (e) {
-        console.error("Gagal memproses JSON Rekomendasi");
-      }
-      rawText = rawText.replace(/\[REKOMENDASI_JSON\][\s\S]*?\[\/REKOMENDASI_JSON\]/, '').trim();
-    }
-
-    setChatHistory([...currentHistory, { role: 'assistant', text: rawText, recommendations }]);
-  };
-
   const filteredKostData = initialKostData.filter((kost) => {
-    const matchSearch = kost.nama.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                        kost.lokasi.toLowerCase().includes(searchTerm.toLowerCase());
-
+    const matchSearch =
+      kost.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      kost.lokasi.toLowerCase().includes(searchTerm.toLowerCase());
     let matchBudget = true;
     if (selectedBudget === 'Di bawah Rp 1 Juta') matchBudget = kost.hargaNum < 1000000;
     if (selectedBudget === 'Rp 1 Juta - Rp 2 Juta') matchBudget = kost.hargaNum >= 1000000 && kost.hargaNum <= 2000000;
     if (selectedBudget === 'Di atas Rp 2 Juta') matchBudget = kost.hargaNum > 2000000;
-
     let matchTipe = true;
     if (selectedTipe === 'Kost Putra') matchTipe = kost.tipe === 'Putra';
     if (selectedTipe === 'Kost Putri') matchTipe = kost.tipe === 'Putri';
     if (selectedTipe === 'Kost Campur') matchTipe = kost.tipe === 'Campur';
-
-    const matchTags = activeFilters.every((filter) => kost.tags.includes(filter));
-
+    const matchTags = activeFilters.every(f => kost.tags.includes(f));
     return matchSearch && matchBudget && matchTipe && matchTags;
+  });
+
+  // ── Inline styles untuk modal ──
+  const S = {
+    overlay: {
+      position: 'fixed', inset: 0,
+      background: 'rgba(0,0,0,0.45)',
+      backdropFilter: 'blur(6px)',
+      zIndex: 9999,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: '16px',
+    },
+    modal: {
+      background: '#fff',
+      borderRadius: '20px',
+      width: '100%', maxWidth: '480px',
+      boxShadow: '0 24px 60px rgba(0,0,0,0.15)',
+      overflow: 'hidden',
+    },
+    modalTop: {
+      padding: '28px 28px 20px',
+      borderBottom: '1px solid #f0f0f0',
+    },
+    eyebrow: {
+      fontSize: '11px', fontWeight: 600,
+      letterSpacing: '.08em', color: '#2d6b55',
+      textTransform: 'uppercase', marginBottom: '6px',
+    },
+    title: {
+      fontSize: '20px', fontWeight: 700,
+      color: '#111827', marginBottom: '6px', lineHeight: 1.2,
+    },
+    sub: {
+      fontSize: '13px', color: '#6b7280', lineHeight: 1.6,
+    },
+    body: { padding: '24px 28px' },
+    row2: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '20px' },
+    fieldGroup: { marginBottom: '20px' },
+    label: {
+      display: 'block', fontSize: '11.5px', fontWeight: 600,
+      color: '#374151', letterSpacing: '.05em',
+      textTransform: 'uppercase', marginBottom: '8px',
+    },
+    select: {
+      width: '100%', padding: '10px 12px',
+      border: '1.5px solid #e5e7eb', borderRadius: '10px',
+      fontSize: '14px', color: '#111827',
+      background: '#fafafa', outline: 'none',
+      fontFamily: 'inherit',
+      appearance: 'none', WebkitAppearance: 'none',
+      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236b7280' d='M1 1l5 5 5-5'/%3E%3C/svg%3E")`,
+      backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center',
+      paddingRight: '32px',
+    },
+    chipGroup: { display: 'flex', gap: '8px', flexWrap: 'wrap' },
+    footer: {
+      padding: '16px 28px',
+      borderTop: '1px solid #f0f0f0',
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      gap: '12px',
+    },
+    btnCancel: {
+      background: 'none', border: 'none',
+      fontSize: '13.5px', color: '#6b7280',
+      cursor: 'pointer', fontFamily: 'inherit', padding: '8px 4px',
+    },
+    btnApply: {
+      background: '#2d6b55', color: '#fff', border: 'none',
+      padding: '11px 24px', borderRadius: '50px',
+      fontSize: '13.5px', fontWeight: 600,
+      cursor: 'pointer', fontFamily: 'inherit',
+      letterSpacing: '.01em',
+    },
+  };
+
+  const chipStyle = (active) => ({
+    display: 'inline-flex', alignItems: 'center', gap: '6px',
+    padding: '7px 14px', borderRadius: '20px',
+    border: active ? '1.5px solid #2d6b55' : '1.5px solid #e5e7eb',
+    fontSize: '13px',
+    color: active ? '#2d6b55' : '#6b7280',
+    background: active ? '#edf5f0' : '#fafafa',
+    cursor: 'pointer', userSelect: 'none',
+    fontWeight: active ? 600 : 400,
+    transition: 'all .15s',
   });
 
   return (
     <>
       <NavbarLoggedIn />
-      
+
+      {/* ── Hero & Search Box ── */}
       <main className="search-hero search-hero--compact">
         <div className="search-hero__inner">
-          <h1>Temukan Kost Aman<br/>& Terlindungi Hukum</h1>
+          <h1>Temukan Kost Aman<br />& Terlindungi Hukum</h1>
           <p>Smart matching AI membantu kamu menemukan kost terbaik sesuai kebutuhan</p>
-
           <div className="search-box">
             <div className="search-field">
               <label>LOKASI / NAMA KOST</label>
-              <input 
-                type="text" 
-                placeholder="Kota, kecamatan, nama..." 
+              <input
+                type="text"
+                placeholder="Kota, kecamatan, nama..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -251,122 +230,98 @@ WAJIB: Di akhir respons text kamu, SELALU sertakan lampiran data JSON rekomendas
 
       <div className="scroll-blocker"></div>
 
+      {/* ── Filter Strip ── */}
       <div className="filter-strip-wrapper">
         <div className="filter-strip">
-          <button className={`filter-tag ${activeFilters.includes('Mahasiswa') ? 'active' : ''}`} onClick={() => toggleFilter('Mahasiswa')}>Mahasiswa</button>
-          <button className={`filter-tag ${activeFilters.includes('Pekerja') ? 'active' : ''}`} onClick={() => toggleFilter('Pekerja')}>Pekerja</button>
-          <button className={`filter-tag ${activeFilters.includes('Ekspatriat') ? 'active' : ''}`} onClick={() => toggleFilter('Ekspatriat')}>Ekspatriat</button>
-          <button className={`filter-tag ${activeFilters.includes('Pasutri') ? 'active' : ''}`} onClick={() => toggleFilter('Pasutri')}>Pasutri</button>
-          
+          {['Mahasiswa','Pekerja','Ekspatriat','Pasutri'].map(f => (
+            <button key={f} className={`filter-tag ${activeFilters.includes(f) ? 'active' : ''}`} onClick={() => toggleFilter(f)}>{f}</button>
+          ))}
           <div className="filter-divider"></div>
-          
-          <button className={`filter-tag ${activeFilters.includes('Terverifikasi') ? 'active' : ''}`} onClick={() => toggleFilter('Terverifikasi')}>Terverifikasi</button>
-          <button className={`filter-tag ${activeFilters.includes('Ada Kontrak Digital') ? 'active' : ''}`} onClick={() => toggleFilter('Ada Kontrak Digital')}>Ada Kontrak Digital</button>
-          <button className={`filter-tag ${activeFilters.includes('Ada Escrow') ? 'active' : ''}`} onClick={() => toggleFilter('Ada Escrow')}>Ada Escrow</button>
-          <button className={`filter-tag ${activeFilters.includes('Scam Score Tinggi') ? 'active' : ''}`} onClick={() => toggleFilter('Scam Score Tinggi')}>Scam Score Tinggi</button>
-          
+          {['Terverifikasi','Ada Kontrak Digital','Ada Escrow','Scam Score Tinggi'].map(f => (
+            <button key={f} className={`filter-tag ${activeFilters.includes(f) ? 'active' : ''}`} onClick={() => toggleFilter(f)}>{f}</button>
+          ))}
           <div className="filter-divider"></div>
-
-          <button className={`filter-tag ${activeFilters.includes('Kamar Mandi Dalam') ? 'active' : ''}`} onClick={() => toggleFilter('Kamar Mandi Dalam')}>Kamar Mandi Dalam</button>
-          <button className={`filter-tag ${activeFilters.includes('AC') ? 'active' : ''}`} onClick={() => toggleFilter('AC')}>AC</button>
-          <button className={`filter-tag ${activeFilters.includes('WiFi') ? 'active' : ''}`} onClick={() => toggleFilter('WiFi')}>WiFi</button>
+          {['Kamar Mandi Dalam','AC','WiFi'].map(f => (
+            <button key={f} className={`filter-tag ${activeFilters.includes(f) ? 'active' : ''}`} onClick={() => toggleFilter(f)}>{f}</button>
+          ))}
         </div>
       </div>
 
+      {/* ── Search Results Layout ── */}
       <section className="search-results-section bg-off-white">
         <div className="search-layout">
-          
-          <div 
-            className={`mobile-filter-overlay ${isMobileFilterOpen ? 'open' : ''}`} 
+
+          <div
+            className={`mobile-filter-overlay ${isMobileFilterOpen ? 'open' : ''}`}
             onClick={() => setIsMobileFilterOpen(false)}
           ></div>
 
           <aside className={`sidebar-filter ${isMobileFilterOpen ? 'open' : ''}`}>
-            
             <div className="mobile-filter-header">
               <h3 style={{ margin: 0, fontSize: '18px', color: '#111827' }}>Filter Pencarian</h3>
-              <button 
-                className="btn-close-filter" 
-                onClick={() => setIsMobileFilterOpen(false)}
-                aria-label="Tutup filter"
-              >
+              <button className="btn-close-filter" onClick={() => setIsMobileFilterOpen(false)} aria-label="Tutup filter">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 </svg>
               </button>
             </div>
 
+            {/* Smart Matching Card */}
             <div className="ai-matching-card">
               <h4>Smart Matching</h4>
-              <p>Mulai sesi konsultasi chat AI untuk temukan rekomendasi kost impianmu</p>
-              <button className="btn-ai" onClick={() => setIsAiModalOpen(true)}>Hubungi AI</button>
+              <p>Aktifkan rekomendasi AI untuk kost yang paling sesuai dengan profilmu</p>
+              <button className="btn-ai" onClick={() => setIsAiModalOpen(true)}>Aktifkan</button>
             </div>
 
             <div className="filter-group">
               <h5 className="filter-title">TARGET PENGHUNI</h5>
-              <label className="checkbox-item">
-                <input type="checkbox" checked={activeFilters.includes('Mahasiswa')} onChange={() => toggleFilter('Mahasiswa')} /> <span>Mahasiswa</span>
-              </label>
-              <label className="checkbox-item">
-                <input type="checkbox" checked={activeFilters.includes('Pekerja')} onChange={() => toggleFilter('Pekerja')} /> <span>Pekerja</span>
-              </label>
-              <label className="checkbox-item">
-                <input type="checkbox" checked={activeFilters.includes('Ekspatriat')} onChange={() => toggleFilter('Ekspatriat')} /> <span>Ekspatriat</span>
-              </label>
-              <label className="checkbox-item">
-                <input type="checkbox" checked={activeFilters.includes('Pasutri')} onChange={() => toggleFilter('Pasutri')} /> <span>Pasutri</span>
-              </label>
+              {['Mahasiswa','Pekerja','Ekspatriat','Pasutri'].map(f => (
+                <label key={f} className="checkbox-item">
+                  <input type="checkbox" checked={activeFilters.includes(f)} onChange={() => toggleFilter(f)} />
+                  <span>{f}</span>
+                </label>
+              ))}
             </div>
 
             <div className="filter-group">
               <h5 className="filter-title">FITUR PERLINDUNGAN</h5>
-              <label className="checkbox-item">
-                <input type="checkbox" checked={activeFilters.includes('Terverifikasi')} onChange={() => toggleFilter('Terverifikasi')} /> <span>Listing Terverifikasi</span>
-              </label>
-              <label className="checkbox-item">
-                <input type="checkbox" checked={activeFilters.includes('Ada Kontrak Digital')} onChange={() => toggleFilter('Ada Kontrak Digital')} /> <span>Kontrak Digital</span>
-              </label>
+              {[['Terverifikasi','Listing Terverifikasi'],['Ada Kontrak Digital','Kontrak Digital']].map(([val, label]) => (
+                <label key={val} className="checkbox-item">
+                  <input type="checkbox" checked={activeFilters.includes(val)} onChange={() => toggleFilter(val)} />
+                  <span>{label}</span>
+                </label>
+              ))}
             </div>
 
             <div className="filter-group">
               <h5 className="filter-title">FASILITAS KAMAR</h5>
-              <label className="checkbox-item">
-                <input type="checkbox" checked={activeFilters.includes('AC')} onChange={() => toggleFilter('AC')} /> <span>AC</span>
-              </label>
-              <label className="checkbox-item">
-                <input type="checkbox" checked={activeFilters.includes('WiFi')} onChange={() => toggleFilter('WiFi')} /> <span>WiFi</span>
-              </label>
-              <label className="checkbox-item">
-                <input type="checkbox" checked={activeFilters.includes('Kamar Mandi Dalam')} onChange={() => toggleFilter('Kamar Mandi Dalam')} /> <span>Kamar mandi dalam</span>
-              </label>
+              {[['AC','AC'],['WiFi','WiFi'],['Kamar Mandi Dalam','Kamar mandi dalam']].map(([val, label]) => (
+                <label key={val} className="checkbox-item">
+                  <input type="checkbox" checked={activeFilters.includes(val)} onChange={() => toggleFilter(val)} />
+                  <span>{label}</span>
+                </label>
+              ))}
             </div>
-            
-            {activeFilters.length > 0 && (
-              <button className="btn-terapkan" onClick={() => setActiveFilters([])} style={{background: '#ef4444'}}>Reset Filter</button>
-            )}
 
+            {activeFilters.length > 0 && (
+              <button className="btn-terapkan" onClick={() => setActiveFilters([])} style={{ background: '#ef4444' }}>Reset Filter</button>
+            )}
             <div className="mobile-filter-apply">
-              <button className="btn-terapkan" onClick={() => setIsMobileFilterOpen(false)}>
-                Tampilkan Hasil
-              </button>
+              <button className="btn-terapkan" onClick={() => setIsMobileFilterOpen(false)}>Tampilkan Hasil</button>
             </div>
           </aside>
 
+          {/* ── Kost Cards ── */}
           <div className="main-results">
             <div className="results-header">
-              <span>Menampilkan <strong style={{color: '#111827'}}>{filteredKostData.length} kost</strong> yang sesuai kriteria</span>
-              
+              <span>Menampilkan <strong style={{ color: '#111827' }}>{filteredKostData.length} kost</strong> yang sesuai kriteria</span>
               <div className="results-header__actions">
-                <button 
-                  className="btn-mobile-filter" 
-                  onClick={() => setIsMobileFilterOpen(true)}
-                >
+                <button className="btn-mobile-filter" onClick={() => setIsMobileFilterOpen(true)}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                    <path d="M4 6H20M7 12H17M10 18H14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M4 6H20M7 12H17M10 18H14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                   Filter {activeFilters.length > 0 && `(${activeFilters.length})`}
                 </button>
-
                 <select className="sort-dropdown">
                   <option>Relevansi</option>
                   <option>Harga Terendah</option>
@@ -376,77 +331,54 @@ WAJIB: Di akhir respons text kamu, SELALU sertakan lampiran data JSON rekomendas
               </div>
             </div>
 
-            {/* Grid Hasil Pencarian Reguler */}
             <div className="kost-grid">
-              {filteredKostData.length > 0 ? (
-                filteredKostData.map(kost => (
-                  <div 
-                    className="kost-card" 
-                    key={kost.id} 
-                    onClick={() => navigate(`/detail/${kost.id}`)} 
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <div className="kost-card__image-area" style={{ padding: 0, overflow: 'hidden' }}>
-                      <img 
-                        src={kost.image} 
-                        alt={kost.nama} 
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                      />
-                      <span className={`badge badge-${kost.badge.toLowerCase()}`}>
-                        {kost.badge}
+              {filteredKostData.length > 0 ? filteredKostData.map(kost => (
+                <div className="kost-card" key={kost.id} onClick={() => navigate(`/detail/${kost.id}`)} style={{ cursor: 'pointer' }}>
+                  <div className="kost-card__image-area" style={{ padding: 0, overflow: 'hidden' }}>
+                    <img src={kost.image} alt={kost.nama} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <span className={`badge badge-${kost.badge.toLowerCase()}`}>{kost.badge}</span>
+                    <button className="btn-favorite" onClick={(e) => e.stopPropagation()}>
+                      <img src={iconSimpan} alt="Simpan" style={{ width: '14px' }} />
+                    </button>
+                  </div>
+                  <div className="kost-card__content">
+                    <h3 className="kost-name">{kost.nama}</h3>
+                    <p className="kost-location">
+                      <img src={iconLokasi} alt="Lokasi" style={{ width: '12px', verticalAlign: 'middle', marginRight: '4px' }} />
+                      {kost.lokasi}
+                    </p>
+                    <div className="kost-price">
+                      <strong style={{ color: '#2d6b55', fontSize: '18px' }}>{kost.harga}</strong>
+                      <span>/bulan</span>
+                    </div>
+                    <div className="kost-facilities">
+                      <span className="fac-item">
+                        <img src={iconHome} alt="Tipe" style={{ width: '14px', verticalAlign: 'middle', marginRight: '4px' }} />
+                        {kost.tipe}
                       </span>
-                      <button 
-                        className="btn-favorite" 
-                        onClick={(e) => e.stopPropagation()} 
-                      >
-                        <img src={iconSimpan} alt="Simpan" style={{ width: '14px' }} />
-                      </button>
-                    </div>
-
-                    <div className="kost-card__content">
-                      <h3 className="kost-name">{kost.nama}</h3>
-                      <p className="kost-location">
-                        <img src={iconLokasi} alt="Lokasi" style={{ width: '12px', verticalAlign: 'middle', marginRight: '4px' }} />
-                        {kost.lokasi}
-                      </p>
-                      <div className="kost-price">
-                        <strong style={{color: '#2d6b55', fontSize: '18px'}}>{kost.harga}</strong><span>/bulan</span>
-                      </div>
-                      
-                      <div className="kost-facilities">
-                        <span className="fac-item">
-                          <img src={iconHome} alt="Tipe" style={{ width: '14px', verticalAlign: 'middle', marginRight: '4px' }} />
-                          {kost.tipe}
-                        </span>
-                        {kost.fasilitas.map((f, i) => {
-                          let iconSrc = null;
-                          if (f === 'AC') iconSrc = iconAc;
-                          if (f === 'WiFi') iconSrc = iconWifi;
-                          if (f === 'Kamar Mandi Dalam') iconSrc = iconKamarMandi;
-                          
-                          return (
-                            <span key={i} className="fac-item">
-                              {iconSrc && <img src={iconSrc} alt={f} style={{ width: '14px', verticalAlign: 'middle', marginRight: '4px' }} />}
-                              {f}
-                            </span>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    <div className="kost-card__footer">
-                      <div className="kost-rating">
-                        <img src={iconReview} alt="Rating" style={{ width: '14px', verticalAlign: 'middle', marginRight: '4px' }} />
-                        {kost.rating} <span>({kost.ulasan} ulasan)</span>
-                      </div>
-                      <div className="kost-scamscore">
-                        <img src={iconEscrow} alt="Aman" style={{ width: '14px', verticalAlign: 'middle', marginRight: '4px' }} />
-                        <strong style={{ fontWeight: 700 }}>{kost.scamScore}</strong>/100
-                      </div>
+                      {kost.fasilitas.map((f, i) => {
+                        const iconMap = { AC: iconAc, WiFi: iconWifi, 'Kamar Mandi Dalam': iconKamarMandi };
+                        return (
+                          <span key={i} className="fac-item">
+                            {iconMap[f] && <img src={iconMap[f]} alt={f} style={{ width: '14px', verticalAlign: 'middle', marginRight: '4px' }} />}
+                            {f}
+                          </span>
+                        );
+                      })}
                     </div>
                   </div>
-                ))
-              ) : (
+                  <div className="kost-card__footer">
+                    <div className="kost-rating">
+                      <img src={iconReview} alt="Rating" style={{ width: '14px', verticalAlign: 'middle', marginRight: '4px' }} />
+                      {kost.rating} <span>({kost.ulasan} ulasan)</span>
+                    </div>
+                    <div className="kost-scamscore">
+                      <img src={iconEscrow} alt="Aman" style={{ width: '14px', verticalAlign: 'middle', marginRight: '4px' }} />
+                      <strong style={{ fontWeight: 700 }}>{kost.scamScore}</strong>/100
+                    </div>
+                  </div>
+                </div>
+              )) : (
                 <div style={{ padding: '40px', textAlign: 'center', gridColumn: '1 / -1', color: '#6b7280' }}>
                   <h3>Yah, kost yang kamu cari belum ketemu</h3>
                   <p>Coba kurangi filter atau ganti kata kunci pencarianmu.</p>
@@ -454,177 +386,98 @@ WAJIB: Di akhir respons text kamu, SELALU sertakan lampiran data JSON rekomendas
               )}
             </div>
           </div>
-          
+
         </div>
       </section>
 
-      {/* ── MODAL SMART MATCHING AI INTERAKTIF ────────────────────────── */}
+      {/* ── MODAL SMART MATCHING ── */}
       {isAiModalOpen && (
-        <div style={{
-          position: 'fixed', inset: 0, background: 'rgba(13, 13, 15, 0.75)', 
-          zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backdropFilter: 'blur(8px)', padding: '16px'
-        }}>
-          <div style={{
-            background: '#18181c', borderRadius: '24px', width: '100%', maxWidth: '640px', 
-            height: '80vh', display: 'flex', flexDirection: 'column', overflow: 'hidden',
-            border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 24px 48px rgba(0,0,0,0.4)'
-          }}>
-            
-            {/* Header Chat */}
-            <div style={{
-              padding: '16px 24px', background: '#22222a', borderBottom: '1px solid rgba(255,255,255,0.08)',
-              display: 'flex', alignItems: 'center', justifyContent: 'between'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <span style={{ fontSize: '24px' }}>🤖</span>
+        <div style={S.overlay} onClick={() => setIsAiModalOpen(false)}>
+          <div style={S.modal} onClick={(e) => e.stopPropagation()}>
+
+            {/* Header */}
+            <div style={S.modalTop}>
+              <div style={S.eyebrow}>Smart Matching</div>
+              <div style={S.title}>Temukan kost yang tepat</div>
+              <p style={S.sub}>Isi profil singkat di bawah, sistem akan menyaring kost yang paling sesuai untukmu.</p>
+            </div>
+
+            {/* Body */}
+            <div style={S.body}>
+
+              {/* Profil + Budget — 2 kolom */}
+              <div style={S.row2}>
                 <div>
-                  <h3 style={{ margin: 0, color: '#f0ede8', fontSize: '16px', fontWeight: 600 }}>KostKu AI Assistant</h3>
-                  <small style={{ color: '#3ecf8e', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <span style={{ width: '6px', height: '6px', background: '#3ecf8e', borderRadius: '50%' }}></span> ONLINE · Gemini 3.5 Flash
-                  </small>
+                  <label style={S.label}>Profil penghuni</label>
+                  <select
+                    style={S.select}
+                    value={aiForm.target}
+                    onChange={(e) => setAiForm({ ...aiForm, target: e.target.value })}
+                  >
+                    <option value="">Pilih profil</option>
+                    <option value="Mahasiswa">Mahasiswa</option>
+                    <option value="Pekerja">Pekerja</option>
+                    <option value="Ekspatriat">Ekspatriat</option>
+                    <option value="Pasutri">Pasutri</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={S.label}>Budget maksimal</label>
+                  <select
+                    style={S.select}
+                    value={aiForm.budget}
+                    onChange={(e) => setAiForm({ ...aiForm, budget: e.target.value })}
+                  >
+                    <option value="">Semua budget</option>
+                    <option value="Di bawah Rp 1 Juta">Di bawah Rp 1 Juta</option>
+                    <option value="Rp 1 Juta - Rp 2 Juta">Rp 1 – 2 Juta</option>
+                    <option value="Di atas Rp 2 Juta">Di atas Rp 2 Juta</option>
+                  </select>
                 </div>
               </div>
-              <button 
-                onClick={() => setIsAiModalOpen(false)}
-                style={{
-                  marginLeft: 'auto', background: 'transparent', border: 'none', color: 'rgba(240,237,232,0.5)',
-                  fontSize: '20px', cursor: 'pointer'
-                }}
-              >
-                ✕
-              </button>
-            </div>
 
-            {/* Area Pesan Chat */}
-            <div style={{
-              flex: 1, padding: '24px', overflowY: 'auto', display: 'flex', flexDirection: 'column',
-              gap: '16px', background: '#0d0d0f'
-            }}>
-              {chatHistory.map((msg, index) => (
-                <div key={index} style={{
-                  display: 'flex', gap: '12px', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                  alignItems: 'flex-start'
-                }}>
-                  {msg.role === 'assistant' && <div style={{ fontSize: '18px', paddingTop: '4px' }}>🤖</div>}
-                  <div style={{ maxWidth: '80%' }}>
-                    {/* Bubble Teks */}
-                    <div style={{
-                      padding: '12px 16px', borderRadius: '16px', fontSize: '14px', lineHeight: '1.5',
-                      whiteSpace: 'pre-line',
-                      background: msg.role === 'user' ? '#2a2420' : '#22222a',
-                      color: '#f0ede8',
-                      border: msg.role === 'user' ? '1px solid rgba(212,168,84,0.25)' : '1px solid rgba(255,255,255,0.08)',
-                      borderTopLeftRadius: msg.role === 'assistant' ? '4px' : '16px',
-                      borderTopRightRadius: msg.role === 'user' ? '4px' : '16px',
-                    }}>
-                      {msg.text}
-                    </div>
-
-                    {/* Render Kartu Rekomendasi di Dalam Chat */}
-                    {msg.recommendations && msg.recommendations.length > 0 && (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '12px' }}>
-                        {msg.recommendations.map((rec) => {
-                          const kost = initialKostData.find(k => k.id === rec.id);
-                          if (!kost) return null;
-                          return (
-                            <div 
-                              key={rec.id}
-                              onClick={() => {
-                                setIsAiModalOpen(false);
-                                navigate(`/detail/${kost.id}`);
-                              }}
-                              style={{
-                                display: 'flex', background: '#18181c', border: '1px solid rgba(255,255,255,0.08)',
-                                borderRadius: '12px', overflow: 'hidden', cursor: 'pointer', position: 'relative',
-                                transition: 'all 0.2s'
-                              }}
-                              onMouseEnter={(e) => e.currentTarget.style.borderColor = '#d4a854'}
-                              onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
-                            >
-                              <img src={kost.image} alt={kost.nama} style={{ width: '90px', height: '90px', objectFit: 'cover' }} />
-                              <div style={{ padding: '10px 14px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginBottom: '4px' }}>
-                                  <span style={{
-                                    fontSize: '10px', fontWeight: 'bold', padding: '2px 6px', borderRadius: '4px',
-                                    background: kost.tipe === 'Putri' ? 'rgba(244,114,182,0.15)' : kost.tipe === 'Putra' ? 'rgba(96,165,250,0.15)' : 'rgba(62,207,142,0.15)',
-                                    color: kost.tipe === 'Putri' ? '#f472b6' : kost.tipe === 'Putra' ? '#60a5fa' : '#3ecf8e'
-                                  }}>{kost.tipe}</span>
-                                  <span style={{ fontSize: '10px', color: '#3ecf8e', background: 'rgba(62,207,142,0.1)', padding: '2px 6px', borderRadius: '4px' }}>✓ {rec.match}% cocok</span>
-                                </div>
-                                <div style={{ fontSize: '13px', fontWeight: 'bold', color: '#f0ede8' }}>{kost.nama}</div>
-                                <div style={{ fontSize: '11px', color: 'rgba(240,237,232,0.5)' }}>📍 {kost.lokasi}</div>
-                                <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#d4a854', marginTop: '2px' }}>{kost.harga}<span style={{ fontSize: '10px', color: 'rgba(240,237,232,0.25)' }}> /bulan</span></div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                  {msg.role === 'user' && <div style={{ fontSize: '18px', paddingTop: '4px' }}>👤</div>}
+              {/* Tipe Kamar — chips */}
+              <div style={S.fieldGroup}>
+                <label style={S.label}>Tipe kamar</label>
+                <div style={S.chipGroup}>
+                  {TIPE_OPTIONS.map(t => (
+                    <span
+                      key={t}
+                      style={chipStyle(aiForm.tipe.includes(t))}
+                      onClick={() => toggleAiChip('tipe', t)}
+                    >
+                      {t}
+                    </span>
+                  ))}
                 </div>
-              ))}
+              </div>
 
-              {isLoading && (
-                <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-start' }}>
-                  <div>🤖</div>
-                  <div style={{ background: '#22222a', padding: '12px 18px', borderRadius: '16px', borderTopLeftRadius: '4px' }}>
-                    <div style={{ display: 'flex', gap: '4px', alignItems: 'center', height: '20px' }}>
-                      <span className="dot-pulse" style={{ width: '6px', height: '6px', background: '#d4a854', borderRadius: '50%', animation: 'bounce 1.4s infinite ease-in-out' }}></span>
-                      <span className="dot-pulse" style={{ width: '6px', height: '6px', background: '#d4a854', borderRadius: '50%', animation: 'bounce 1.4s infinite ease-in-out', animationDelay: '0.2s' }}></span>
-                      <span className="dot-pulse" style={{ width: '6px', height: '6px', background: '#d4a854', borderRadius: '50%', animation: 'bounce 1.4s infinite ease-in-out', animationDelay: '0.4s' }}></span>
-                    </div>
-                  </div>
+              {/* Fasilitas — chips */}
+              <div style={{ ...S.fieldGroup, marginBottom: 0 }}>
+                <label style={S.label}>Fasilitas yang diinginkan</label>
+                <div style={S.chipGroup}>
+                  {FASILITAS_OPTIONS.map(f => (
+                    <span
+                      key={f}
+                      style={chipStyle(aiForm.fasilitas.includes(f))}
+                      onClick={() => toggleAiChip('fasilitas', f)}
+                    >
+                      {f}
+                    </span>
+                  ))}
                 </div>
-              )}
-              <div ref={messagesEndRef} />
+              </div>
             </div>
 
-            {/* Quick Prompts Chip */}
-            <div style={{
-              display: 'flex', gap: '8px', padding: '10px 20px', background: '#18181c', 
-              overflowX: 'auto', borderTop: '1px solid rgba(255,255,255,0.08)'
-            }}>
-              <button onClick={() => handleSendChatMessage('Cari kost dekat Dago Bandung budget maksimal 1.5 juta')} style={{ background: '#22222a', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(240,237,232,0.7)', borderRadius: '20px', padding: '6px 12px', fontSize: '11px', cursor: 'pointer', whiteSpace: 'nowrap' }}>🎓 Dekat Dago</button>
-              <button onClick={() => handleSendChatMessage('Kost putri Cihampelas yang aman')} style={{ background: '#22222a', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(240,237,232,0.7)', borderRadius: '20px', padding: '6px 12px', fontSize: '11px', cursor: 'pointer', whiteSpace: 'nowrap' }}>👩 Khusus Putri</button>
-              <button onClick={() => handleSendChatMessage('Kost premium budget 2 juta dengan AC dan WiFi')} style={{ background: '#22222a', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(240,237,232,0.7)', borderRadius: '20px', padding: '6px 12px', fontSize: '11px', cursor: 'pointer', whiteSpace: 'nowrap' }}>💎 Fasilitas Lengkap</button>
-              <button onClick={() => handleSendChatMessage('Ada kost murah di bawah 1 juta?')} style={{ background: '#22222a', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(240,237,232,0.7)', borderRadius: '20px', padding: '6px 12px', fontSize: '11px', cursor: 'pointer', whiteSpace: 'nowrap' }}>💰 Budget Hemat</button>
-            </div>
-
-            {/* Input Bar */}
-            <div style={{
-              padding: '16px 20px', background: '#22222a', borderTop: '1px solid rgba(255,255,255,0.08)',
-              display: 'flex', gap: '12px', alignItems: 'center'
-            }}>
-              <input 
-                type="text"
-                placeholder="Tulis pesan ke KostKu AI (Contoh: Kost putri murah ada AC)..."
-                value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSendChatMessage()}
-                style={{
-                  flex: 1, background: '#0d0d0f', border: '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: '12px', padding: '12px 16px', color: '#f0ede8', fontSize: '13px', outline: 'none'
-                }}
-              />
-              <button 
-                onClick={() => handleSendChatMessage()}
-                disabled={isLoading}
-                style={{
-                  background: 'linear-gradient(135deg, #b8860b, #d4a854)', border: 'none',
-                  borderRadius: '12px', padding: '12px 20px', color: '#0d0d0f', fontWeight: 'bold',
-                  fontSize: '13px', cursor: isLoading ? 'not-allowed' : 'pointer'
-                }}
-              >
-                Kirim
-              </button>
+            {/* Footer */}
+            <div style={S.footer}>
+              <button style={S.btnCancel} onClick={() => setIsAiModalOpen(false)}>Batal</button>
+              <button style={S.btnApply} onClick={handleAiMatch}>Terapkan filter</button>
             </div>
 
           </div>
         </div>
       )}
-
     </>
   );
 }

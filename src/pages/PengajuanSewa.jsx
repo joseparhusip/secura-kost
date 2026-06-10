@@ -197,10 +197,10 @@ export default function PengajuanSewa() {
     setShowSuccessModal(true);
   };
 
-  const handleKembaliPencarian = () => {
-    setShowSuccessModal(false);
-    navigate('/');
-  };
+const handleKembaliPencarian = () => {
+  setShowSuccessModal(false);
+  navigate('/search');  // <-- sekarang ke Search Kost
+};
 
   const steps = [
     { id: 1, label: 'Data Penyewa',    sub: 'Identitas diri' },
