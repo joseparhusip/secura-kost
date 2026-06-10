@@ -1,0 +1,239 @@
+/* Container Utama */
+.tim-section {
+  padding: 80px 20px;
+  background-color: #f8fafc;
+  font-family: 'Inter', sans-serif;
+}
+
+.tim-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Bagian Header */
+.tim-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.tim-title {
+  font-size: 32px;
+  color: #1e293b;
+  margin-bottom: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tim-subtitle {
+  font-size: 16px;
+  color: #64748b;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Kartu Profil General */
+.tim-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-top: 5px solid #16a34a; /* DIUBAH JADI HIJAU */
+  position: relative;
+  z-index: 2;
+  height: 100%; /* Agar tinggi kartu merata */
+}
+
+.tim-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Kontainer Utama Pohon Struktur Organisasi */
+.tree-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Area CEO di Atas */
+.tree-root {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 40px;
+  width: 100%;
+}
+
+.ceo-card {
+  max-width: 360px;
+  width: 100%;
+}
+
+/* Garis vertikal lurus ke bawah dari kartu CEO - WARNA HIJAU */
+.tree-root::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 40px;
+  background-color: #16a34a; 
+  z-index: 1;
+}
+
+/* Area Grid 4 Kolom di Bawah */
+.tree-children {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  width: 100%;
+}
+
+.tree-child {
+  position: relative;
+  padding-top: 40px;
+}
+
+/* Garis vertikal yang nempel ke atas setiap kartu cabang - WARNA HIJAU */
+.tree-child::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 40px;
+  background-color: #16a34a;
+  z-index: 1;
+}
+
+/* Garis horizontal panjang penghubung - DIPERBAIKI AGAR TIDAK PUTUS */
+.tree-child::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -15px; /* Menutupi setengah gap kiri */
+  width: calc(100% + 30px); /* Menutupi lebar kartu + gap full */
+  height: 2px;
+  background-color: #16a34a; /* HIJAU */
+  z-index: 1;
+}
+
+/* Memotong garis untuk anak pertama (paling kiri) */
+.tree-child:first-child::after {
+  left: 50%;
+  width: calc(50% + 15px);
+}
+
+/* Memotong garis untuk anak terakhir (paling kanan) */
+.tree-child:last-child::after {
+  left: -15px;
+  width: calc(50% + 15px);
+}
+
+/* Style Komponen Gambar */
+.tim-image-wrapper {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #e2e8f0;
+}
+
+.tim-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* Style Teks */
+.tim-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* PERBAIKAN: Tinggi Nama Dibuat Seragam agar Role Sejajar */
+.tim-name {
+  font-size: 16px;
+  color: #0f172a;
+  margin: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  min-height: 48px; /* Memaksa area nama tinggi 2 baris */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.4;
+}
+
+.tim-role {
+  font-size: 13px;
+  color: #2563eb; /* Role tetap biru agar kontras, atasnya hijau */
+  font-weight: 600;
+}
+
+.tim-desc {
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* RESPONSIVITAS - Tablet (2 Kolom) */
+@media (max-width: 1024px) {
+  .tree-children {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  /* Sembunyikan garis karena susunan kotak sudah berganti baris */
+  .tree-root::after,
+  .tree-child::before,
+  .tree-child::after {
+    display: none;
+  }
+
+  .tree-root {
+    padding-bottom: 24px;
+  }
+
+  .tree-child {
+    padding-top: 0;
+  }
+
+  .tim-name {
+    min-height: auto; /* Kembalikan ke otomatis di layar kecil */
+  }
+}
+
+/* RESPONSIVITAS - Handphone (1 Kolom Vertikal) */
+@media (max-width: 768px) {
+  .tim-section {
+    padding: 60px 16px;
+  }
+
+  .tim-title {
+    font-size: 26px;
+  }
+
+  .tree-children {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .tree-root {
+    padding-bottom: 20px;
+  }
+
+  .ceo-card {
+    max-width: 100%;
+  }
+}

@@ -27,6 +27,7 @@ import ekspatriatIcon from '../assets/icons/ekspatriat.png'
 import pasutriIcon from '../assets/icons/pasutrii.png'
 
 import AuthCard from './AuthCard'
+import TimKami from './TimKami'
 
 const SLIDES = [
   { id: 1, src: carousel1 },
@@ -160,7 +161,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Menambahkan ID "platform-kos" pada section ini */}
       <section id="platform-kos" className="hero hero--section-2">
         <div className="hero__inner">
 
@@ -197,7 +197,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* ── AUTH CARD (Masuk / Daftar) ── */}
           <div className="hero__auth">
             <AuthCard />
           </div>
@@ -335,6 +334,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Komponen TimKami dipanggil di sini */}
+      <TimKami />
+      
     </>
   )
 }
