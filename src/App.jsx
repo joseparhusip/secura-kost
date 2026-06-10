@@ -8,9 +8,22 @@ import SearchKost from './pages/SearchKost'
 import DetailKost from './pages/DetailKost'
 import EdukasiHukum from './pages/EdukasiHukum'
 import PengajuanSewa from './pages/PengajuanSewa'
-import Dashboard from './pages/admin/Dashboard' // Import halaman dashboard admin
 
-// ── KOMPONEN AUTO SCROLL (VERSI SUPER PINTAR) ──
+// Import halaman admin
+import Dashboard from './pages/admin/Dashboard'
+import KostSaya from './pages/admin/KostSaya'
+import FormKost from './pages/admin/FormKost'
+import PenyewaAktif from './pages/admin/PenyewaAktif'
+import KontrakDigital from './pages/admin/KontrakDigital'
+import EscrowDeposit from './pages/admin/EscrowDeposit'
+import MediasiKonflik from './pages/admin/MediasiKonflik'
+import Pengaturan from './pages/admin/Pengaturan'
+
+// IMPORT HALAMAN LIHAT KOST BARU
+// (Asumsi kamu menyimpan LihatKost.jsx di dalam folder admin)
+import LihatKost from './pages/admin/LihatKost'
+
+// KOMPONEN AUTO SCROLL (VERSI SUPER PINTAR)
 function ScrollToTop() {
   const location = useLocation();
 
@@ -76,11 +89,52 @@ export default function App() {
           element={<PengajuanSewa />}
         />
         
-        {/* Route khusus Dashboard Pemilik Kost */}
+        {/* ROUTE KHUSUS DASHBOARD PEMILIK KOST */}
         {/* Rute ini tidak memakai Navbar & Footer umum karena sudah punya layout mandiri */}
         <Route
           path="/pemilik-kost"
           element={<Dashboard />}
+        />
+        <Route
+          path="/kost-saya"
+          element={<KostSaya />}
+        />
+
+        {/* ROUTE LIHAT KOST YANG BARU DITAMBAHKAN */}
+        <Route
+          path="/lihat-kost/:id"
+          element={<LihatKost />}
+        />
+
+        <Route
+          path="/tambah-kost"
+          element={<FormKost isEdit={false} />}
+        />
+        <Route
+          path="/edit-kost/:id"
+          element={<FormKost isEdit={true} />}
+        />
+        <Route
+          path="/penyewa-aktif"
+          element={<PenyewaAktif />}
+        />
+        <Route
+          path="/kontrak-digital"
+          element={<KontrakDigital />}
+        />
+        <Route
+          path="/escrow-deposit"
+          element={<EscrowDeposit />}
+        />
+        <Route
+          path="/mediasi-konflik"
+          element={<MediasiKonflik />}
+        />
+        
+        {/* TAMBAHKAN ROUTE PENGATURAN DI SINI */}
+        <Route
+          path="/pengaturan"
+          element={<Pengaturan />}
         />
       </Routes>
     </Router>

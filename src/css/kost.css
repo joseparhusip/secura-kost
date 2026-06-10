@@ -1,0 +1,505 @@
+/* src/css/kost.css */
+
+/* ==========================================================================
+   HALAMAN KOST SAYA
+   ========================================================================== */
+
+.kost-page-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.header-icon-wrapper svg {
+  display: block;
+}
+
+.kost-page-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+/* Container Putih Besar (Membungkus List dan Tombol) */
+.kost-main-wrapper {
+  background: #ffffff;
+  border: 1px solid #f3f4f6;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+}
+
+/* List Item Kost */
+.kost-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  gap: 12px;
+}
+
+.kost-item-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+  flex: 1;
+}
+
+.kost-thumbnail {
+  width: 56px;
+  height: 56px;
+  background-color: #f4f6f5;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.kost-info h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+  margin-top: 0;
+}
+
+.kost-info p {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.kost-item-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.badge-verified {
+  background-color: #ecfdf5;
+  color: #10b981;
+  border: 1px solid #a7f3d0;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.btn-edit {
+  background: white;
+  border: 1px solid #d1d5db;
+  color: #4b5563;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-edit:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.btn-view {
+  background: #4a7c6f;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.btn-view:hover {
+  background: #396357;
+}
+
+.btn-tambah-kost {
+  background: #c97a63;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.btn-tambah-kost:hover {
+  background: #b56b56;
+}
+
+/* ==========================================================================
+   HALAMAN FORM KOST (TAMBAH / EDIT)
+   ========================================================================== */
+
+.form-header-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.form-header-title h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.form-header-subtitle {
+  color: #6b7280;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.form-section {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+}
+
+.form-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin-top: 0;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 16px;
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 0;
+}
+
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.form-group.no-margin {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.form-control {
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1f2937;
+  background-color: #fff;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #2e504a;
+  box-shadow: 0 0 0 3px rgba(46, 80, 74, 0.1);
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.upload-box {
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  background-color: #faf8f5;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.upload-box:hover {
+  background-color: #f3f4f6;
+}
+
+.upload-box span {
+  font-size: 14px;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.upload-box small {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+}
+
+.checkbox-item:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #2e504a;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkbox-item span {
+  font-size: 13px;
+  color: #374151;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-cancel {
+  background: white;
+  border: 1px solid #d1d5db;
+  color: #4b5563;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-cancel:hover {
+  background: #f3f4f6;
+}
+
+.btn-save {
+  background: #2e504a;
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-save:hover {
+  background: #24403b;
+}
+
+/* ==========================================================================
+   RESPONSIVE TABLET (≤ 1024px)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .form-grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .checkbox-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .kost-page-header h1 {
+    font-size: 26px;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE MOBILE (≤ 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* KOST SAYA */
+  .kost-page-header {
+    margin-bottom: 16px;
+  }
+
+  .kost-page-header h1 {
+    font-size: 22px;
+  }
+
+  .header-icon-wrapper svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .kost-main-wrapper {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .kost-list-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .kost-item-left {
+    width: 100%;
+  }
+
+  .kost-item-right {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .badge-verified {
+    order: -1;
+  }
+
+  .btn-edit,
+  .btn-view {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .btn-tambah-kost {
+    width: 100%;
+    justify-content: center;
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  /* FORM KOST */
+  .form-header-title h1 {
+    font-size: 22px;
+  }
+
+  .form-section {
+    padding: 16px;
+    border-radius: 10px;
+  }
+
+  .form-section-title {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+
+  .form-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .form-grid-3 {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .checkbox-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .checkbox-item {
+    padding: 10px 12px;
+  }
+
+  .upload-box {
+    padding: 20px 16px;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .btn-cancel,
+  .btn-save {
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    border-radius: 10px;
+  }
+}
+
+/* ==========================================================================
+   SMALL MOBILE (≤ 480px)
+   ========================================================================== */
+@media (max-width: 480px) {
+  .checkbox-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .kost-info h3 {
+    font-size: 14px;
+  }
+
+  .kost-info p {
+    font-size: 12px;
+  }
+}
