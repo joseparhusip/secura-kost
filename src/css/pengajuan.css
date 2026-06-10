@@ -1,0 +1,1005 @@
+/* ============================================================
+   pengajuan.css — SecuraKost v2 (Upgraded Design)
+   Warna tetap: #426B52 (hijau), #1A2B4C (navy), #D97757 (coral)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.pengajuan-page {
+  background: #F0F4F1;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  color: #1a2b4c;
+  padding-bottom: 80px;
+}
+
+/* ---------- Top Bar ---------- */
+.pengajuan-header-top {
+  text-align: center;
+  padding: 11px 16px;
+  background: #fff;
+  border-bottom: 1px solid #E6EBE8;
+  font-size: 12.5px;
+  color: #6b7280;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- Container ---------- */
+.pengajuan-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ---------- Page Title ---------- */
+.pengajuan-title {
+  padding: 36px 0 28px;
+}
+
+.pengajuan-title h1 {
+  font-size: 30px;
+  font-weight: 800;
+  color: #18243E;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+
+.pengajuan-title p {
+  color: #6b7280;
+  font-size: 13.5px;
+}
+
+/* ============================================================
+   STEPPER — Connected, No Gap
+   ============================================================ */
+.stepper-container {
+  display: flex;
+  align-items: stretch;
+  margin-bottom: 28px;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  border: 1px solid #E2E8E4;
+}
+
+.stepper-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px;
+  background: #fff;
+  position: relative;
+  transition: background 0.25s, color 0.25s;
+  cursor: default;
+}
+
+/* Divider line between steps */
+.stepper-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 18%;
+  height: 64%;
+  width: 1px;
+  background: #E2E8E4;
+}
+
+.stepper-item.active {
+  background: #426B52;
+}
+
+.stepper-item.active::after {
+  background: rgba(255,255,255,0.25);
+}
+
+.stepper-item.completed {
+  background: #EDF5F0;
+}
+
+.stepper-item.completed::after {
+  background: #C8DDD0;
+}
+
+/* Step Circle */
+.step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #F0F4F2;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all 0.25s;
+}
+
+.stepper-item.active .step-circle {
+  background: rgba(255,255,255,0.22);
+  color: #fff;
+}
+
+.stepper-item.completed .step-circle {
+  background: #426B52;
+  color: #fff;
+  font-size: 15px; /* for checkmark */
+}
+
+/* Step label + sublabel */
+.step-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.step-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.stepper-item.active .step-label {
+  color: #fff;
+}
+
+.stepper-item.completed .step-label {
+  color: #426B52;
+}
+
+.step-sublabel {
+  font-size: 10.5px;
+  color: #c4c9c6;
+  font-weight: 400;
+}
+
+.stepper-item.active .step-sublabel {
+  color: rgba(255,255,255,0.65);
+}
+
+.stepper-item.completed .step-sublabel {
+  color: #8ab89a;
+}
+
+/* ============================================================
+   Two-Column Layout
+   ============================================================ */
+.pengajuan-content-split {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.form-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.summary-section {
+  width: 300px;
+  position: sticky;
+  top: 20px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   Form Card
+   ============================================================ */
+.form-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  border: 1px solid #E8EDEA;
+}
+
+.card-heading {
+  font-size: 15px;
+  font-weight: 700;
+  color: #18243E;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 14px;
+  border-bottom: 1.5px solid #F0F4F2;
+}
+
+.card-heading .icon {
+  font-size: 18px;
+}
+
+/* ---------- Form Grid ---------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 18px;
+}
+
+/* ---------- Form Group ---------- */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #374151;
+  letter-spacing: 0.01em;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%; /* [FIX] Pastikan semua input form selalu memenuhi lebar wadahnya */
+  padding: 11px 14px;
+  border: 1.5px solid #E2E8E4;
+  border-radius: 9px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  color: #1a2b4c;
+  background: #FAFCFB;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.5;
+}
+
+.form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236b7280' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #426B52;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(66,107,82,0.1);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #b0b8bc;
+}
+
+/* ============================================================
+   Rincian Box (Step 2)
+   ============================================================ */
+.rincian-box {
+  background: #F2F7F4;
+  border: 1px solid #D8E8DC;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 8px;
+}
+
+.rincian-title {
+  font-weight: 700;
+  font-size: 13.5px;
+  margin-bottom: 14px;
+  color: #2D4A39;
+}
+
+.r-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 9px;
+  color: #4b5563;
+}
+
+.r-row span:last-child {
+  font-weight: 500;
+  color: #1a2b4c;
+}
+
+.r-divider {
+  height: 1.5px;
+  background: #D0E0D6;
+  margin: 14px 0;
+}
+
+.r-total {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.r-total span:first-child { color: #1a2b4c; }
+.r-total span:last-child { color: #426B52; font-size: 16px; }
+
+.info-escrow-box {
+  background: #EBF4FF;
+  color: #1e4073;
+  border: 1px solid #BDD5F0;
+  padding: 13px 16px;
+  border-radius: 9px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  margin-top: 14px;
+}
+
+/* ============================================================
+   Kontrak (Step 3)
+   ============================================================ */
+.legal-notice {
+  background: #FFFBEB;
+  color: #7c5c2a;
+  border: 1px solid #F3D98B;
+  padding: 13px 16px;
+  border-radius: 9px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+.contract-box {
+  border: 1.5px solid #E0E6E2;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.contract-header {
+  background: #1A2B4C;
+  color: #fff;
+  padding: 18px 20px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+.contract-header span {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: #8ba3cc;
+  margin-top: 4px;
+}
+
+.contract-body {
+  padding: 20px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #374151;
+  max-height: 240px;
+  overflow-y: auto;
+  border-bottom: 1px solid #eee;
+  scrollbar-width: thin;
+}
+
+.contract-body h4 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 16px 0 8px;
+  color: #426B52;
+}
+
+.contract-body h4:first-child { margin-top: 0; }
+
+.signature-area {
+  padding: 20px;
+  background: #FAFCFB;
+}
+
+.signature-area > p {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 10px;
+}
+
+.sign-box {
+  border: 2px dashed #C8D8CE;
+  border-radius: 10px;
+  padding: 28px 20px;
+  text-align: center;
+  cursor: pointer;
+  background: #fff;
+  margin-bottom: 4px;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.sign-box:hover {
+  border-color: #426B52;
+  background: #F2F7F4;
+  transform: translateY(-1px);
+}
+
+.sign-box-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.sign-box-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.sign-box-hint {
+  font-size: 11.5px;
+  color: #9ca3af;
+}
+
+/* ── Preview setelah tanda tangan ── */
+.sign-preview-wrapper {
+  border: 1.5px solid #C8DDD0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 4px;
+  background: #fff;
+}
+
+.sign-preview-img {
+  display: block;
+  width: 100%;
+  max-height: 160px;
+  object-fit: contain;
+  padding: 12px;
+  background: #fff;
+}
+
+.sign-preview-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #EDF5F0;
+  border-top: 1px solid #C8DDD0;
+}
+
+.sign-verified-badge {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #426B52;
+}
+
+.sign-redo-btn {
+  background: none;
+  border: 1px solid #426B52;
+  color: #426B52;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.sign-redo-btn:hover {
+  background: #426B52;
+  color: #fff;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: #374151;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.checkbox-container input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: #426B52;
+  margin-top: 1px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   Payment (Step 4)
+   ============================================================ */
+.payment-total-box {
+  background: linear-gradient(135deg, #EDF5F0 0%, #F5FBF7 100%);
+  border: 1.5px solid #C8DDD0;
+  padding: 22px 24px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.p-text {
+  font-weight: 700;
+  font-size: 14px;
+  color: #1a2b4c;
+}
+
+.p-text span {
+  display: block;
+  font-weight: 400;
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 5px;
+}
+
+.p-amount {
+  font-size: 26px;
+  font-weight: 800;
+  color: #426B52;
+  letter-spacing: -0.5px;
+}
+
+.mt-4 { margin-top: 20px; }
+
+.security-notice {
+  background: #F4F6F9;
+  border: 1px solid #DDE3EC;
+  padding: 14px 16px;
+  border-radius: 9px;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: #374151;
+  margin-top: 16px;
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.form-action {
+  margin-top: 28px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+.btn-next {
+  background: #426B52;
+  color: #fff;
+  border: none;
+  padding: 11px 22px 11px 26px;
+  border-radius: 50px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+  box-shadow: 0 4px 14px rgba(66,107,82,0.25);
+  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-next svg {
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.btn-next:hover {
+  background: #345745;
+  box-shadow: 0 6px 18px rgba(66,107,82,0.35);
+  transform: translateY(-1px);
+}
+
+.btn-next:hover svg { transform: translateX(3px); }
+.btn-next:active { transform: translateY(0); }
+
+.btn-next:disabled {
+  background: #C4CCC7;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.btn-next:disabled svg { transform: none; }
+
+.btn-prev {
+  background: transparent;
+  color: #6b7280;
+  border: 1.5px solid #D1D5DB;
+  padding: 11px 26px 11px 20px;
+  border-radius: 50px;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-prev svg {
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.btn-prev:hover {
+  border-color: #426B52;
+  color: #426B52;
+}
+
+.btn-prev:hover svg { transform: translateX(-3px); }
+
+.btn-submit {
+  background: #D97757;
+  color: #fff;
+  border: none;
+  padding: 11px 22px 11px 26px;
+  border-radius: 50px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  box-shadow: 0 4px 14px rgba(217,119,87,0.3);
+  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-submit svg {
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.btn-submit:hover svg { transform: translateX(3px); }
+
+.btn-submit:hover {
+  background: #C2633E;
+  box-shadow: 0 6px 18px rgba(217,119,87,0.4);
+  transform: translateY(-1px);
+}
+
+.btn-submit:active { transform: translateY(0); }
+
+/* ============================================================
+   Summary Card (Right)
+   ============================================================ */
+.summary-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  border: 1px solid #E8EDEA;
+}
+
+.sum-header {
+  background: linear-gradient(135deg, #426B52 0%, #355847 100%);
+  color: #fff;
+  padding: 22px 20px;
+}
+
+.sum-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.sum-header p {
+  font-size: 12px;
+  color: #c0dbc9;
+}
+
+.sum-body {
+  padding: 20px;
+}
+
+.s-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 12px;
+  color: #4b5563;
+}
+
+.s-row span:last-child {
+  font-weight: 500;
+  color: #1a2b4c;
+}
+
+.s-divider {
+  height: 1.5px;
+  background: #EEF2EF;
+  margin: 14px 0;
+}
+
+.s-total {
+  font-weight: 800 !important;
+  font-size: 14.5px !important;
+}
+
+.s-total span:first-child { color: #1a2b4c !important; }
+.s-total span:last-child { color: #426B52 !important; font-size: 15px !important; }
+
+.sum-footer {
+  padding: 16px 20px;
+  background: #F8FAF9;
+  border-top: 1.5px solid #EEF2EF;
+}
+
+.trust-item {
+  font-size: 12px;
+  color: #4b5563;
+  margin-bottom: 9px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  line-height: 1.4;
+}
+
+.trust-item:last-child { margin-bottom: 0; }
+
+/* ============================================================
+   Signature Modal Overlay
+   ============================================================ */
+.sig-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 43, 76, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: overlayIn 0.2s ease;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.sig-modal {
+  background: #fff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 740px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+  padding: 28px;
+  animation: modalIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.92) translateY(16px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.sig-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.sig-modal-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1A2B4C;
+  margin-bottom: 3px;
+}
+
+.sig-modal-sub {
+  font-size: 12.5px;
+  color: #6b7280;
+}
+
+.sig-close-btn {
+  background: #F3F4F6;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 14px;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.sig-close-btn:hover {
+  background: #E5E7EB;
+  color: #1A2B4C;
+}
+
+/* Canvas area */
+.sig-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  border: 2px dashed #D1D8D4;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #FAFCFB;
+  cursor: crosshair;
+  margin-bottom: 20px;
+}
+
+.sig-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+
+.sig-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.sig-placeholder span {
+  font-size: 14px;
+  color: #C4CAC7;
+  font-style: italic;
+}
+
+.sig-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.sig-btn-clear {
+  background: none;
+  border: 1.5px solid #E5E7EB;
+  color: #6b7280;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 13.5px;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.sig-btn-clear:hover {
+  border-color: #D97757;
+  color: #D97757;
+}
+
+.sig-btn-confirm {
+  background: #426B52;
+  color: #fff;
+  border: none;
+  padding: 11px 28px;
+  border-radius: 50px;
+  font-size: 13.5px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(66,107,82,0.25);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+.sig-btn-confirm:hover {
+  background: #345745;
+  transform: translateY(-1px);
+}
+
+.sig-btn-confirm:disabled {
+  background: #C4CCC7;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+
+/* ============================================================
+   RESPONSIVE FIXES (Disusun Ulang Agar Tidak Berantakan)
+   ============================================================ */
+
+/* 1. Layar Tablet & Laptop Kecil (Max 1024px) */
+@media (max-width: 1024px) {
+  .pengajuan-content-split {
+    flex-direction: column; 
+    gap: 32px;
+    align-items: stretch; /* [FIX] Paksa kontainer untuk full width ke samping */
+  }
+  
+  .summary-section,
+  .form-section {
+    width: 100%; /* [FIX] Memastikan bagian form juga lebarnya 100% di HP */
+    position: static;
+  }
+  
+  /* Agar Stepper tidak gepeng dan bisa di-scroll */
+  .stepper-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 14px;
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    justify-content: flex-start;
+  }
+  
+  .stepper-container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome/Safari */
+  }
+  
+  .stepper-item {
+    flex: 0 0 auto; /* Mencegah item dipaksa mengecil */
+    min-width: 220px;
+  }
+
+  /* Mengatur tombol Aksi Form agar menyusun ke bawah pada layar kecil */
+  .form-action.flex-between {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+  
+  .form-action button,
+  .form-action .btn-next,
+  .form-action .btn-prev,
+  .form-action .btn-submit {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* 2. Layar Mobile (Max 768px) */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stepper-item {
+    min-width: 190px;
+    padding: 14px 16px;
+  }
+  
+  .pengajuan-title h1 { 
+    font-size: 24px; 
+  }
+  
+  .p-amount { 
+    font-size: 20px; 
+  }
+  
+  .payment-total-box { 
+    flex-direction: column; 
+    align-items: flex-start; 
+    gap: 8px; 
+  }
+  
+  .sig-modal { 
+    width: 95vw; 
+    padding: 20px; 
+  }
+  
+  .sig-canvas-wrapper { 
+    height: 220px; 
+  }
+}

@@ -1,0 +1,371 @@
+/* ============================================================
+   AUTH CARD — Masuk / Daftar
+   ============================================================ */
+
+.auth-wrapper {
+  width: 100%;
+  max-width: 420px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ── TAB TOGGLE ── */
+.auth-tabs {
+  margin-bottom: 0;
+}
+
+.auth-tabs__track {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #f0ede8;
+  border-radius: 14px 14px 0 0;
+  padding: 6px;
+}
+
+.auth-tabs__indicator {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  width: calc(50% - 6px);
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+  transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+}
+
+.auth-tabs__indicator.left  { left: 6px; }
+.auth-tabs__indicator.right { left: calc(50%); }
+
+.auth-tabs__btn {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 0;
+  border-radius: 10px;
+  color: #9ca3af;
+  transition: color 0.25s ease;
+  font-family: inherit;
+  letter-spacing: 0.2px;
+}
+
+.auth-tabs__btn.active {
+  color: #111827;
+}
+
+/* ── CARD BODY ── */
+.auth-card {
+  background: #ffffff;
+  border-radius: 0 0 24px 24px;
+  padding: 32px 32px 28px;
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.14),
+    0 4px 12px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  position: relative;
+  min-height: 420px;
+}
+
+/* ── PANELS ── */
+.auth-panel {
+  width: 100%;
+}
+
+.auth-panel--visible {
+  display: block;
+  animation: panelSlideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.auth-panel--hidden {
+  display: none;
+}
+
+@keyframes panelSlideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── HEADER ── */
+.auth-panel__head {
+  margin-bottom: 24px;
+}
+
+.auth-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0d0d0d;
+  margin-bottom: 5px;
+  letter-spacing: -0.3px;
+}
+
+.auth-subtitle {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* ── SOCIAL BUTTONS ── */
+.auth-social {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.auth-social__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 16px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s;
+  font-family: inherit;
+  letter-spacing: 0.1px;
+}
+
+/* Hilangkan semua hover background — hanya border & lift */
+.auth-social__btn:hover {
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+  background: #fff;
+}
+
+.auth-social__btn--google {
+  border-color: #e5e7eb;
+  color: #374151;
+}
+
+.auth-social__btn--google:hover {
+  border-color: #dadce0;
+  background: #fff;
+}
+
+.auth-social__btn--wa {
+  border-color: #e5e7eb;
+  color: #166534;
+}
+
+.auth-social__btn--wa:hover {
+  border-color: #86efac;
+  background: #fff;
+}
+
+.auth-social__icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* ── DIVIDER ── */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.auth-divider span {
+  color: #9ca3af;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+/* ── FIELDS ── */
+.auth-field {
+  margin-bottom: 14px;
+}
+
+.auth-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 9px;
+  font-size: 14px;
+  color: #111827;
+  background: #fafafa;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.auth-input::placeholder {
+  color: #c4c9d4;
+}
+
+.auth-input:focus {
+  border-color: #2d6b55;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(45, 107, 85, 0.10);
+}
+
+/* ── FORGOT ── */
+.auth-forgot {
+  text-align: right;
+  margin-top: -8px;
+  margin-bottom: 18px;
+}
+
+.auth-forgot a {
+  font-size: 12px;
+  color: #2d6b55;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.auth-forgot a:hover {
+  color: #1a4a3a;
+}
+
+/* ── SUBMIT BUTTONS ── */
+.auth-submit {
+  width: 100%;
+  padding: 13px 20px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  margin-bottom: 16px;
+  font-family: inherit;
+  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.auth-submit svg {
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.auth-submit:hover svg {
+  transform: translateX(4px);
+}
+
+.auth-submit--green {
+  background: #2d6b55;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(45, 107, 85, 0.30);
+}
+
+.auth-submit--green:hover {
+  background: #1a4a3a;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(45, 107, 85, 0.40);
+}
+
+.auth-submit--orange {
+  background: #e07b39;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(224, 123, 57, 0.30);
+}
+
+.auth-submit--orange:hover {
+  background: #c96a2a;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(224, 123, 57, 0.40);
+}
+
+/* ── SWITCH LINK ── */
+.auth-switch {
+  text-align: center;
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.auth-switch__link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2d6b55;
+  font-family: inherit;
+  transition: color 0.2s;
+}
+
+.auth-switch__link:hover {
+  color: #1a4a3a;
+}
+
+/* ── ROLE SELECTOR (Daftar tab) ── */
+.auth-roles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.auth-role {
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 14px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.25s, background 0.25s, transform 0.15s;
+  background: #fff;
+}
+
+.auth-role:hover {
+  border-color: #2d6b55;
+  background: #f0faf6;
+  transform: translateY(-2px);
+}
+
+.auth-role.active {
+  border-color: #2d6b55;
+  background: #edf7f2;
+  box-shadow: 0 0 0 3px rgba(45, 107, 85, 0.08);
+}
+
+.auth-role__emoji {
+  font-size: 26px;
+  margin-bottom: 6px;
+}
+
+.auth-role__name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 2px;
+}
+
+.auth-role__desc {
+  font-size: 11px;
+  color: #6b7280;
+  line-height: 1.4;
+}
