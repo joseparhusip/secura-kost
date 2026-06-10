@@ -8,6 +8,7 @@ import SearchKost from './pages/SearchKost'
 import DetailKost from './pages/DetailKost'
 import EdukasiHukum from './pages/EdukasiHukum'
 import PengajuanSewa from './pages/PengajuanSewa'
+import Dashboard from './pages/admin/Dashboard' // Import halaman dashboard admin
 
 // ── KOMPONEN AUTO SCROLL (VERSI SUPER PINTAR) ──
 function ScrollToTop() {
@@ -73,6 +74,13 @@ export default function App() {
         <Route
           path="/pengajuan/:id"
           element={<PengajuanSewa />}
+        />
+        
+        {/* Route khusus Dashboard Pemilik Kost */}
+        {/* Rute ini tidak memakai Navbar & Footer umum karena sudah punya layout mandiri */}
+        <Route
+          path="/pemilik-kost"
+          element={<Dashboard />}
         />
       </Routes>
     </Router>

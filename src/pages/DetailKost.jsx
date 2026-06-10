@@ -504,7 +504,7 @@ export default function DetailKost() {
                 </div>
                 <div className="score-info">
                   <h4>SANGAT AMAN</h4>
-                  <p>Berdasarkan 8 faktor verifikasi</p>
+                  <p>Berdasarkan faktor verifikasi</p>
                 </div>
                 <div className="score-bars">
                   <div className="bar-item"><span>Foto terverifikasi</span><div className="bar full"></div></div>

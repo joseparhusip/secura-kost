@@ -81,6 +81,11 @@ export default function NavbarLoggedIn() {
         </div>
 
         <div className="navbar__actions navbar__actions--desktop">
+          {/* Tombol Pemilik Kost Desktop */}
+          <button className="btn-nav-outline" onClick={() => navigate('/pemilik-kost')}>
+            Pemilik Kost
+          </button>
+
           <button className="btn-nav-solid" onClick={handleLogout} title="Klik untuk keluar akun">
             Keluar
           </button>
@@ -148,6 +153,18 @@ export default function NavbarLoggedIn() {
         </nav>
 
         <div className="mobile-drawer__actions">
+          {/* Tombol Pemilik Kost Mobile */}
+          <button
+            className="mobile-drawer__btn mobile-drawer__btn--solid"
+            onClick={() => {
+              navigate('/pemilik-kost');
+              setMenuOpen(false);
+            }}
+            style={{ marginBottom: '12px' }}
+          >
+            Pemilik Kost
+          </button>
+
           <button
             className="mobile-drawer__btn mobile-drawer__btn--outline"
             onClick={handleLogout}
