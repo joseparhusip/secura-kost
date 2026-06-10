@@ -948,15 +948,15 @@
    ============================================================ */
 .viewer-360-container {
   background: #0d1117;
-  width: 100%;
-  max-width: 1000px;
+  width: 96vw;
+  max-width: 1280px;
   border-radius: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 32px 24px 24px;
+  padding: 32px 28px 24px;
   position: relative;
-  max-height: 90vh;
+  max-height: 94vh;
   overflow-y: auto;
 }
 
@@ -1033,6 +1033,20 @@
 .foto-360-notice span:first-child {
   font-size: 16px;
   flex-shrink: 0;
+}
+
+/* Responsive: di layar kecil modal lebih ramping */
+@media (max-width: 600px) {
+  .viewer-360-container {
+    width: 100vw;
+    border-radius: 12px 12px 0 0;
+    padding: 24px 12px 20px;
+    max-height: 92vh;
+    align-self: flex-end;
+  }
+  .title-360 {
+    font-size: 18px;
+  }
 }
 
 /* Override Pannellum agar sesuai desain */
